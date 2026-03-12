@@ -4,8 +4,8 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Build output
-main.js
+# Build output (keep main.js for releases)
+# main.js
 *.js.map
 build/
 dist/
