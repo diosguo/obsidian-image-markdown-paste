@@ -331,36 +331,36 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 		newPath: string, 
 		alt: string
 	): string {
-		// 解码旧路径，因为内容中可能是编码后的格式
-		const decodedOldPath = decodeURIComponent(oldPath);
-		const decodedNewPath = decodeURIComponent(newPath);
+		// 对旧路径进行 URL 编码，因为文档中存储的是编码后的路径
+		const encodedOldPath = encodeUrlPath(oldPath);
+		const encodedNewPath = encodeUrlPath(newPath);
 		
 		let result = content;
 		
-		// 替换 Markdown 格式的图片引用
-		// 匹配 ![alt](oldPath) 或 ![alt](oldPath "title")
+		// 替换 Markdown 格式的图片引用（匹配编码后的路径）
+		// 匹配 ![alt](encodedOldPath) 或 ![alt](encodedOldPath "title")
 		const markdownRegex = new RegExp(
-			`!\\[(.*?)\\]\\(${this.escapeRegex(oldPath)}(\\s+".*?")?\\)`, 
+			`!\\[(.*?)\\]\\(${this.escapeRegex(encodedOldPath)}(\\s+".*?")?\\)`, 
 			'g'
 		);
 		result = result.replace(markdownRegex, (match, p1, p2) => {
 			if (p2) {
-				return `![${p1}](${newPath}${p2})`;
+				return `![${p1}](${encodedNewPath}${p2})`;
 			}
-			return `![${p1}](${newPath})`;
+			return `![${p1}](${encodedNewPath})`;
 		});
 		
-		// 也尝试替换解码后的路径
-		if (decodedOldPath !== oldPath) {
-			const decodedMarkdownRegex = new RegExp(
-				`!\\[(.*?)\\]\\(${this.escapeRegex(decodedOldPath)}(\\s+".*?")?\\)`, 
+		// 也尝试替换未编码的路径（兼容旧数据）
+		if (encodedOldPath !== oldPath) {
+			const plainMarkdownRegex = new RegExp(
+				`!\\[(.*?)\\]\\(${this.escapeRegex(oldPath)}(\\s+".*?")?\\)`, 
 				'g'
 			);
-			result = result.replace(decodedMarkdownRegex, (match, p1, p2) => {
+			result = result.replace(plainMarkdownRegex, (match, p1, p2) => {
 				if (p2) {
-					return `![${p1}](${newPath}${p2})`;
+					return `![${p1}](${encodedNewPath}${p2})`;
 				}
-				return `![${p1}](${newPath})`;
+				return `![${p1}](${encodedNewPath})`;
 			});
 		}
 		

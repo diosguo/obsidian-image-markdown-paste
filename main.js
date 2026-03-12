@@ -386,29 +386,29 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
    * 更新内容中所有匹配的图片引用
    */
   updateAllImageRefs(content, oldPath, newPath, alt) {
-    const decodedOldPath = decodeURIComponent(oldPath);
-    const decodedNewPath = decodeURIComponent(newPath);
+    const encodedOldPath = encodeUrlPath(oldPath);
+    const encodedNewPath = encodeUrlPath(newPath);
     let result = content;
     const markdownRegex = new RegExp(
-      `!\\[(.*?)\\]\\(${this.escapeRegex(oldPath)}(\\s+".*?")?\\)`,
+      `!\\[(.*?)\\]\\(${this.escapeRegex(encodedOldPath)}(\\s+".*?")?\\)`,
       "g"
     );
     result = result.replace(markdownRegex, (match, p1, p2) => {
       if (p2) {
-        return `![${p1}](${newPath}${p2})`;
+        return `![${p1}](${encodedNewPath}${p2})`;
       }
-      return `![${p1}](${newPath})`;
+      return `![${p1}](${encodedNewPath})`;
     });
-    if (decodedOldPath !== oldPath) {
-      const decodedMarkdownRegex = new RegExp(
-        `!\\[(.*?)\\]\\(${this.escapeRegex(decodedOldPath)}(\\s+".*?")?\\)`,
+    if (encodedOldPath !== oldPath) {
+      const plainMarkdownRegex = new RegExp(
+        `!\\[(.*?)\\]\\(${this.escapeRegex(oldPath)}(\\s+".*?")?\\)`,
         "g"
       );
-      result = result.replace(decodedMarkdownRegex, (match, p1, p2) => {
+      result = result.replace(plainMarkdownRegex, (match, p1, p2) => {
         if (p2) {
-          return `![${p1}](${newPath}${p2})`;
+          return `![${p1}](${encodedNewPath}${p2})`;
         }
-        return `![${p1}](${newPath})`;
+        return `![${p1}](${encodedNewPath})`;
       });
     }
     const wikiRegex = new RegExp(
