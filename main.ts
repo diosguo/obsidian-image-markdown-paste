@@ -259,45 +259,59 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 		// 查找所有图片引用
 		const imageRefs = this.extractImageReferences(content);
 		
+		if (imageRefs.length === 0) return;
+
 		let newContent = content;
 		let hasChanges = false;
+		
+		// 用于跟踪已经处理过的旧路径，避免重复处理
+		const processedPaths = new Set<string>();
 
 		for (const ref of imageRefs) {
+			// 解析图片的绝对路径
+			const oldImagePath = this.resolveImagePath(ref.path, file.path);
+			if (!oldImagePath) continue;
+			
+			// 检查这个路径是否已经处理过
+			if (processedPaths.has(oldImagePath)) continue;
+			processedPaths.add(oldImagePath);
+			
 			// 检查图片路径是否包含旧文件名
-			if (ref.path.includes(oldFileName)) {
-				// 尝试找到实际的图片文件
-				const oldImagePath = this.resolveImagePath(ref.path, file.path);
-				
-				if (oldImagePath) {
-					const imageFile = this.app.vault.getAbstractFileByPath(oldImagePath);
-					
-					if (imageFile instanceof TFile) {
-						// 生成新的图片路径
-						const newImagePath = oldImagePath.replace(
-							new RegExp(oldFileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), 
-							newFileName
-						);
+			if (!oldImagePath.includes(oldFileName)) continue;
+			
+			const imageFile = this.app.vault.getAbstractFileByPath(oldImagePath);
+			if (!(imageFile instanceof TFile)) continue;
+			
+			// 生成新的图片路径
+			const newImagePath = oldImagePath.replace(
+				new RegExp(oldFileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), 
+				newFileName
+			);
 
-						// 重命名图片文件
-						if (newImagePath !== oldImagePath) {
-							try {
-								await this.app.fileManager.renameFile(imageFile, newImagePath);
-								
-								// 更新内容中的引用
-								const newRelativePath = getRelativePath(file.path, newImagePath);
-								newContent = this.replaceImageReference(
-									newContent, 
-									ref.fullMatch, 
-									ref.alt || ref.path.split('/').pop()?.replace(/\.[^/.]+$/, '') || '', 
-									newRelativePath
-								);
-								hasChanges = true;
-							} catch (error) {
-								console.error(`重命名图片失败: ${oldImagePath}`, error);
-							}
-						}
-					}
+			if (newImagePath === oldImagePath) continue;
+
+			try {
+				// 确保新路径的父目录存在
+				const newParentDir = newImagePath.split('/').slice(0, -1).join('/');
+				if (newParentDir) {
+					await this.ensureFolderExists(newParentDir);
 				}
+				
+				// 重命名图片文件
+				await this.app.fileManager.renameFile(imageFile, newImagePath);
+				
+				// 更新所有引用此图片的链接
+				const newRelativePath = getRelativePath(file.path, newImagePath);
+				const altText = newImagePath.split('/').pop()?.replace(/\.[^/.]+$/, '') || '';
+				
+				// 替换所有匹配的旧引用
+				const oldRelativePath = getRelativePath(file.path, oldImagePath);
+				newContent = this.updateAllImageRefs(newContent, oldRelativePath, newRelativePath, altText);
+				hasChanges = true;
+				
+				console.log(`图片已重命名: ${oldImagePath} -> ${newImagePath}`);
+			} catch (error) {
+				console.error(`重命名图片失败: ${oldImagePath}`, error);
 			}
 		}
 
@@ -306,6 +320,71 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 			await this.app.vault.modify(file, newContent);
 			new Notice('已同步更新图片引用');
 		}
+	}
+
+	/**
+	 * 更新内容中所有匹配的图片引用
+	 */
+	private updateAllImageRefs(
+		content: string, 
+		oldPath: string, 
+		newPath: string, 
+		alt: string
+	): string {
+		// 解码旧路径，因为内容中可能是编码后的格式
+		const decodedOldPath = decodeURIComponent(oldPath);
+		const decodedNewPath = decodeURIComponent(newPath);
+		
+		let result = content;
+		
+		// 替换 Markdown 格式的图片引用
+		// 匹配 ![alt](oldPath) 或 ![alt](oldPath "title")
+		const markdownRegex = new RegExp(
+			`!\\[(.*?)\\]\\(${this.escapeRegex(oldPath)}(\\s+".*?")?\\)`, 
+			'g'
+		);
+		result = result.replace(markdownRegex, (match, p1, p2) => {
+			if (p2) {
+				return `![${p1}](${newPath}${p2})`;
+			}
+			return `![${p1}](${newPath})`;
+		});
+		
+		// 也尝试替换解码后的路径
+		if (decodedOldPath !== oldPath) {
+			const decodedMarkdownRegex = new RegExp(
+				`!\\[(.*?)\\]\\(${this.escapeRegex(decodedOldPath)}(\\s+".*?")?\\)`, 
+				'g'
+			);
+			result = result.replace(decodedMarkdownRegex, (match, p1, p2) => {
+				if (p2) {
+					return `![${p1}](${newPath}${p2})`;
+				}
+				return `![${p1}](${newPath})`;
+			});
+		}
+		
+		// 替换 WikiLink 格式的图片引用
+		// 匹配 [[oldPath]] 或 [[oldPath|alt]]
+		const wikiRegex = new RegExp(
+			`\\[\\[${this.escapeRegex(oldPath)}(\\|.*?)?\\]\\]`, 
+			'g'
+		);
+		result = result.replace(wikiRegex, (match, p1) => {
+			if (p1) {
+				return `[[${newPath}${p1}]]`;
+			}
+			return `[[${newPath}]]`;
+		});
+		
+		return result;
+	}
+
+	/**
+	 * 转义正则表达式特殊字符
+	 */
+	private escapeRegex(string: string): string {
+		return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 	}
 
 	/**

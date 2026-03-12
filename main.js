@@ -338,41 +338,96 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
     var _a;
     const content = await this.app.vault.read(file);
     const imageRefs = this.extractImageReferences(content);
+    if (imageRefs.length === 0)
+      return;
     let newContent = content;
     let hasChanges = false;
+    const processedPaths = /* @__PURE__ */ new Set();
     for (const ref of imageRefs) {
-      if (ref.path.includes(oldFileName)) {
-        const oldImagePath = this.resolveImagePath(ref.path, file.path);
-        if (oldImagePath) {
-          const imageFile = this.app.vault.getAbstractFileByPath(oldImagePath);
-          if (imageFile instanceof import_obsidian3.TFile) {
-            const newImagePath = oldImagePath.replace(
-              new RegExp(oldFileName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
-              newFileName
-            );
-            if (newImagePath !== oldImagePath) {
-              try {
-                await this.app.fileManager.renameFile(imageFile, newImagePath);
-                const newRelativePath = getRelativePath(file.path, newImagePath);
-                newContent = this.replaceImageReference(
-                  newContent,
-                  ref.fullMatch,
-                  ref.alt || ((_a = ref.path.split("/").pop()) == null ? void 0 : _a.replace(/\.[^/.]+$/, "")) || "",
-                  newRelativePath
-                );
-                hasChanges = true;
-              } catch (error) {
-                console.error(`\u91CD\u547D\u540D\u56FE\u7247\u5931\u8D25: ${oldImagePath}`, error);
-              }
-            }
-          }
+      const oldImagePath = this.resolveImagePath(ref.path, file.path);
+      if (!oldImagePath)
+        continue;
+      if (processedPaths.has(oldImagePath))
+        continue;
+      processedPaths.add(oldImagePath);
+      if (!oldImagePath.includes(oldFileName))
+        continue;
+      const imageFile = this.app.vault.getAbstractFileByPath(oldImagePath);
+      if (!(imageFile instanceof import_obsidian3.TFile))
+        continue;
+      const newImagePath = oldImagePath.replace(
+        new RegExp(oldFileName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
+        newFileName
+      );
+      if (newImagePath === oldImagePath)
+        continue;
+      try {
+        const newParentDir = newImagePath.split("/").slice(0, -1).join("/");
+        if (newParentDir) {
+          await this.ensureFolderExists(newParentDir);
         }
+        await this.app.fileManager.renameFile(imageFile, newImagePath);
+        const newRelativePath = getRelativePath(file.path, newImagePath);
+        const altText = ((_a = newImagePath.split("/").pop()) == null ? void 0 : _a.replace(/\.[^/.]+$/, "")) || "";
+        const oldRelativePath = getRelativePath(file.path, oldImagePath);
+        newContent = this.updateAllImageRefs(newContent, oldRelativePath, newRelativePath, altText);
+        hasChanges = true;
+        console.log(`\u56FE\u7247\u5DF2\u91CD\u547D\u540D: ${oldImagePath} -> ${newImagePath}`);
+      } catch (error) {
+        console.error(`\u91CD\u547D\u540D\u56FE\u7247\u5931\u8D25: ${oldImagePath}`, error);
       }
     }
     if (hasChanges) {
       await this.app.vault.modify(file, newContent);
       new import_obsidian3.Notice("\u5DF2\u540C\u6B65\u66F4\u65B0\u56FE\u7247\u5F15\u7528");
     }
+  }
+  /**
+   * 更新内容中所有匹配的图片引用
+   */
+  updateAllImageRefs(content, oldPath, newPath, alt) {
+    const decodedOldPath = decodeURIComponent(oldPath);
+    const decodedNewPath = decodeURIComponent(newPath);
+    let result = content;
+    const markdownRegex = new RegExp(
+      `!\\[(.*?)\\]\\(${this.escapeRegex(oldPath)}(\\s+".*?")?\\)`,
+      "g"
+    );
+    result = result.replace(markdownRegex, (match, p1, p2) => {
+      if (p2) {
+        return `![${p1}](${newPath}${p2})`;
+      }
+      return `![${p1}](${newPath})`;
+    });
+    if (decodedOldPath !== oldPath) {
+      const decodedMarkdownRegex = new RegExp(
+        `!\\[(.*?)\\]\\(${this.escapeRegex(decodedOldPath)}(\\s+".*?")?\\)`,
+        "g"
+      );
+      result = result.replace(decodedMarkdownRegex, (match, p1, p2) => {
+        if (p2) {
+          return `![${p1}](${newPath}${p2})`;
+        }
+        return `![${p1}](${newPath})`;
+      });
+    }
+    const wikiRegex = new RegExp(
+      `\\[\\[${this.escapeRegex(oldPath)}(\\|.*?)?\\]\\]`,
+      "g"
+    );
+    result = result.replace(wikiRegex, (match, p1) => {
+      if (p1) {
+        return `[[${newPath}${p1}]]`;
+      }
+      return `[[${newPath}]]`;
+    });
+    return result;
+  }
+  /**
+   * 转义正则表达式特殊字符
+   */
+  escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
   /**
    * 处理图片移动（当文档移动时）
