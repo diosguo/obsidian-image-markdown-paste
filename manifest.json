@@ -3,7 +3,7 @@
 	"name": "Image Markdown Paste",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Customize image paste behavior with dynamic paths and standard Markdown references",
+	"description": "Customize image paste behavior with dynamic paths and standard Markdown references.",
 	"author": "diosguo",
 	"authorUrl": "",
 	"fundingUrl": "",
