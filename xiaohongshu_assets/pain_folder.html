@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .card {
+            width: 1080px;
+            height: 1440px;
+            background: #1a1a2e;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 80px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 60px;
+            color: #ff6b6b;
+        }
+        .folder {
+            background: #16213e;
+            border-radius: 20px;
+            padding: 40px;
+            font-family: "SF Mono", Monaco, monospace;
+            font-size: 32px;
+            line-height: 1.8;
+        }
+        .folder-icon { color: #ffd93d; }
+        .file { color: #a0a0a0; }
+        .dots { color: #666; }
+        .footer {
+            margin-top: auto;
+            font-size: 36px;
+            color: #ff6b6b;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .emoji { font-size: 48px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">😭 你是不是也这样？</div>
+        <div class="folder">
+            <div><span class="folder-icon">📁</span> attachments</div>
+            <div style="margin-left: 40px;">
+                <div class="file">├── Pasted image 20260301.png</div>
+                <div class="file">├── Pasted image 20260302.png</div>
+                <div class="file">├── Pasted image 20260303.png</div>
+                <div class="dots">├── ...</div>
+                <div class="file">├── Pasted image 20260398.png</div>
+                <div class="file">└── Pasted image 20260399.png</div>
+            </div>
+        </div>
+        <div class="footer">
+            <span class="emoji">❌</span>
+            <span>500+ 张图片堆在一起，根本找不到归属</span>
+        </div>
+    </div>
+</body>
+</html>

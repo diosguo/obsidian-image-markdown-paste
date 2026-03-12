@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .card {
+            width: 1080px;
+            height: 1440px;
+            background: linear-gradient(135deg, #7B68EE 0%, #4B0082 100%);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+        }
+        .card::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+        }
+        .icon {
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 100px;
+            margin-bottom: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .title {
+            font-size: 72px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-size: 40px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 32px;
+            margin-top: 60px;
+            backdrop-filter: blur(10px);
+        }
+        .emoji {
+            font-size: 120px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="emoji">💎</div>
+        <div class="title">Obsidian 图片管理神器</div>
+        <div class="subtitle">告别混乱 attachments</div>
+        <div class="subtitle">一键规范图片路径</div>
+        <div class="tag">💡 技术博主必备插件</div>
+    </div>
+</body>
+</html>

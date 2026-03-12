@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .card {
+            width: 1080px;
+            height: 1440px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 70px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header {
+            font-size: 52px;
+            font-weight: bold;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        .flow {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex: 1;
+        }
+        .step {
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 35px;
+            backdrop-filter: blur(10px);
+        }
+        .step-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .step-content {
+            font-size: 28px;
+            opacity: 0.9;
+        }
+        .arrow {
+            text-align: center;
+            font-size: 40px;
+            opacity: 0.7;
+        }
+        .highlight {
+            background: rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 36px;
+            background: rgba(255,255,255,0.2);
+            padding: 30px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">🔄 智能同步功能</div>
+        
+        <div class="flow">
+            <div class="step">
+                <div class="step-title">1️⃣ 重命名文档</div>
+                <div class="step-content">
+                    <span class="highlight">笔记A.md</span> → <span class="highlight">笔记B.md</span>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-title">2️⃣ 图片自动重命名</div>
+                <div class="step-content">
+                    文件夹 <span class="highlight">笔记A/</span> → <span class="highlight">笔记B/</span>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-title">3️⃣ 引用自动更新</div>
+                <div class="step-content">文档内所有图片链接自动修正</div>
+            </div>
+        </div>
+        
+        <div class="footer">✨ 无需手动修复链接！移动文档同理</div>
+    </div>
+</body>
+</html>

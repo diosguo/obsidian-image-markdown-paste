@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .card {
+            width: 1080px;
+            height: 1440px;
+            background: linear-gradient(135deg, #7B68EE 0%, #4B0082 100%);
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 80px;
+            text-align: center;
+        }
+        .emoji {
+            font-size: 150px;
+            margin-bottom: 50px;
+        }
+        .title {
+            font-size: 64px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .subtitle {
+            font-size: 40px;
+            opacity: 0.9;
+            margin-bottom: 80px;
+            line-height: 1.4;
+        }
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 25px 60px;
+            border-radius: 50px;
+            font-size: 32px;
+            margin-bottom: 50px;
+            backdrop-filter: blur(10px);
+        }
+        .link {
+            font-size: 28px;
+            opacity: 0.8;
+            margin-bottom: 60px;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .tag {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="emoji">🚀</div>
+        <div class="title">Image Markdown Paste</div>
+        <div class="subtitle">让你的 Obsidian<br>图片管理井井有条</div>
+        <div class="badge">⭐ GitHub 开源免费</div>
+        <div class="link">🔗 链接在评论区</div>
+        <div class="tags">
+            <div class="tag">#Obsidian</div>
+            <div class="tag">#笔记工具</div>
+            <div class="tag">#效率工具</div>
+            <div class="tag">#知识管理</div>
+        </div>
+    </div>
+</body>
+</html>

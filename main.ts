@@ -18,6 +18,7 @@ import {
 	parseMarkdownLink,
 	createMarkdownLink,
 	normalizePath,
+	encodeUrlPath,
 } from './utils';
 
 export default class ImageMarkdownPastePlugin extends Plugin {
@@ -158,13 +159,17 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 			// 6. 计算相对路径
 			const relativePath = getRelativePath(sourceFile.path, finalPath);
 
-			// 7. 插入图片引用
+			// 7. 对路径进行 URL 编码（处理空格、中文等特殊字符）
+			const encodedPath = encodeUrlPath(relativePath);
+
+			// 8. 插入图片引用
 			const altText = finalFileName.replace(/\.[^/.]+$/, '');
 			let imageLink: string;
 			
 			if (this.settings.useStandardMarkdown) {
-				imageLink = createMarkdownLink(altText, relativePath);
+				imageLink = createMarkdownLink(altText, encodedPath);
 			} else {
+				// WikiLink 格式不需要 URL 编码
 				imageLink = `[[${finalPath}|${altText}]]`;
 			}
 
@@ -456,7 +461,9 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 	): string {
 		// 根据设置决定使用哪种格式
 		if (this.settings.useStandardMarkdown) {
-			const newRef = createMarkdownLink(alt, newPath);
+			// 对路径进行 URL 编码
+			const encodedPath = encodeUrlPath(newPath);
+			const newRef = createMarkdownLink(alt, encodedPath);
 			return content.replace(oldRef, newRef);
 		} else {
 			// 使用 WikiLink 格式，但包含完整路径
@@ -489,9 +496,10 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 			
 			if (absPath) {
 				const relativePath = getRelativePath(file.path, absPath);
+				const encodedPath = encodeUrlPath(relativePath);
 				const alt = ref.alt || absPath.split('/').pop()?.replace(/\.[^/.]+$/, '') || '';
 				
-				const newRef = createMarkdownLink(alt, relativePath);
+				const newRef = createMarkdownLink(alt, encodedPath);
 				newContent = newContent.replace(ref.fullMatch, newRef);
 				convertedCount++;
 			}

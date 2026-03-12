@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>小红书配图预览</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f0f0;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        .item {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .item-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .item-num {
+            background: #7B68EE;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+        iframe {
+            width: 100%;
+            height: 533px;
+            border: none;
+            border-radius: 10px;
+            background: #f5f5f5;
+        }
+        .tips {
+            max-width: 1800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .tips h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .tips ul {
+            margin-left: 20px;
+            line-height: 2;
+            color: #555;
+        }
+        .tips code {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>📱 小红书配图预览（9张）</h1>
+    
+    <div class="grid">
+        <div class="item">
+            <div class="item-title"><span class="item-num">1</span>封面图 - 插件介绍</div>
+            <iframe src="cover.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">2</span>痛点图 - 文件夹混乱</div>
+            <iframe src="pain_folder.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">3</span>痛点图 - 图片失效</div>
+            <iframe src="pain_vscode.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">4</span>解决方案</div>
+            <iframe src="solution.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">5</span>功能展示 - 文件夹对比</div>
+            <iframe src="compare_folder.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">6</span>功能展示 - 格式对比</div>
+            <iframe src="compare_format.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">7</span>功能展示 - 智能同步</div>
+            <iframe src="sync.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">8</span>安装教程</div>
+            <iframe src="install.html"></iframe>
+        </div>
+        
+        <div class="item">
+            <div class="item-title"><span class="item-num">9</span>结尾图 - CTA</div>
+            <iframe src="final.html"></iframe>
+        </div>
+    </div>
+    
+    <div class="tips">
+        <h2>📸 截图使用方法</h2>
+        <ul>
+            <li>在浏览器中打开此 HTML 文件（推荐 Chrome）</li>
+            <li>按 <code>F11</code> 进入全屏模式</li>
+            <li>使用系统截图工具截取每张卡片（推荐尺寸 1080x1440）</li>
+            <li>Mac: <code>Cmd + Shift + 4</code>，Windows: <code>Win + Shift + S</code></li>
+            <li>或使用浏览器开发者工具的设备模拟功能，设置分辨率为 1080x1440 后截图</li>
+        </ul>
+        
+        <h2 style="margin-top: 30px;">🎨 自定义修改</h2>
+        <ul>
+            <li>所有 HTML 文件都可以用文本编辑器打开修改</li>
+            <li>可以调整颜色、文字、添加真实截图等</li>
+            <li>配色方案：紫罗兰 <code>#7B68EE</code>、成功绿 <code>#4ade80</code>、警告红 <code>#ff6b6b</code></li>
+        </ul>
+    </div>
+</body>
+</html>

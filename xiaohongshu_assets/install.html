@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .card {
+            width: 1080px;
+            height: 1440px;
+            background: #0f0f23;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 70px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header {
+            font-size: 52px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        .method {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        .method-title {
+            font-size: 32px;
+            color: #7B68EE;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 26px;
+        }
+        .num {
+            width: 40px;
+            height: 40px;
+            background: #7B68EE;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .code-box {
+            background: #2d2d3d;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 22px;
+            color: #4ade80;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 28px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">📥 安装方法</div>
+        
+        <div class="method">
+            <div class="method-title">方法：BRAT 插件安装（推荐）</div>
+            <div class="steps">
+                <div class="step">
+                    <div class="num">1</div>
+                    <span>安装 BRAT 插件</span>
+                </div>
+                <div class="step">
+                    <div class="num">2</div>
+                    <span>Ctrl+P → 添加测试插件</span>
+                </div>
+                <div class="step">
+                    <div class="num">3</div>
+                    <span>粘贴仓库地址</span>
+                </div>
+            </div>
+            <div class="code-box">
+                github.com/diosguo/obsidian-image-markdown-paste
+            </div>
+        </div>
+        
+        <div class="footer">插件上架后可直接在社区市场搜索安装 🔍</div>
+    </div>
+</body>
+</html>

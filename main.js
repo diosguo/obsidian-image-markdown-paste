@@ -163,6 +163,11 @@ function createMarkdownLink(alt, path, title) {
   }
   return `![${alt}](${path})`;
 }
+function encodeUrlPath(path) {
+  return path.split("/").map((segment) => {
+    return encodeURIComponent(segment);
+  }).join("/");
+}
 
 // main.ts
 var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
@@ -260,10 +265,11 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
       const arrayBuffer = await imageFile.arrayBuffer();
       await this.app.vault.adapter.writeBinary(finalPath, arrayBuffer);
       const relativePath = getRelativePath(sourceFile.path, finalPath);
+      const encodedPath = encodeUrlPath(relativePath);
       const altText = finalFileName.replace(/\.[^/.]+$/, "");
       let imageLink;
       if (this.settings.useStandardMarkdown) {
-        imageLink = createMarkdownLink(altText, relativePath);
+        imageLink = createMarkdownLink(altText, encodedPath);
       } else {
         imageLink = `[[${finalPath}|${altText}]]`;
       }
@@ -468,7 +474,8 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
    */
   replaceImageReference(content, oldRef, alt, newPath) {
     if (this.settings.useStandardMarkdown) {
-      const newRef = createMarkdownLink(alt, newPath);
+      const encodedPath = encodeUrlPath(newPath);
+      const newRef = createMarkdownLink(alt, encodedPath);
       return content.replace(oldRef, newRef);
     } else {
       const newRef = `[[${newPath}|${alt}]]`;
@@ -495,8 +502,9 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
       const absPath = this.resolveImagePath(ref.path, file.path);
       if (absPath) {
         const relativePath = getRelativePath(file.path, absPath);
+        const encodedPath = encodeUrlPath(relativePath);
         const alt = ref.alt || ((_a = absPath.split("/").pop()) == null ? void 0 : _a.replace(/\.[^/.]+$/, "")) || "";
-        const newRef = createMarkdownLink(alt, relativePath);
+        const newRef = createMarkdownLink(alt, encodedPath);
         newContent = newContent.replace(ref.fullMatch, newRef);
         convertedCount++;
       }

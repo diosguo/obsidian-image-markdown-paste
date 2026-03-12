@@ -182,3 +182,31 @@ export function ensureMarkdownExt(path: string): string {
 export function removeExtension(path: string): string {
 	return path.replace(/\.[^/.]+$/, '');
 }
+
+/**
+ * 编码 URL 路径中的特殊字符
+ * 将空格、中文等字符转换为 %XX 格式，但保留路径分隔符 /
+ */
+export function encodeUrlPath(path: string): string {
+	// 先按 / 分割，对每一段进行编码，然后再用 / 连接
+	// 这样可以保留路径结构，同时编码每一段中的特殊字符
+	return path.split('/').map(segment => {
+		// 使用 encodeURIComponent 编码每一段
+		// 这会编码空格、中文、特殊符号等
+		return encodeURIComponent(segment);
+	}).join('/');
+}
+
+/**
+ * 解码 URL 路径中的特殊字符
+ */
+export function decodeUrlPath(path: string): string {
+	return path.split('/').map(segment => {
+		try {
+			return decodeURIComponent(segment);
+		} catch (e) {
+			// 解码失败返回原字符串
+			return segment;
+		}
+	}).join('/');
+}

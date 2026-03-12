@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .card {
+            width: 1080px;
+            height: 1440px;
+            background: #0f0f23;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            padding: 60px;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .header {
+            font-size: 44px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        .compare {
+            display: flex;
+            gap: 40px;
+            flex: 1;
+        }
+        .side {
+            flex: 1;
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 30px;
+        }
+        .side-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bad { color: #ff6b6b; }
+        .good { color: #4ade80; }
+        .folder-tree {
+            font-family: "SF Mono", Monaco, monospace;
+            font-size: 22px;
+            line-height: 1.6;
+            color: #a0a0a0;
+        }
+        .folder-icon { color: #ffd93d; }
+        .subfolder { margin-left: 20px; }
+        .file { color: #888; }
+        .highlight {
+            background: linear-gradient(90deg, #7B68EE, #4B0082);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 30px;
+            font-size: 24px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">📁 图片自动分类存放</div>
+        <div class="compare">
+            <div class="side">
+                <div class="side-title bad">❌ 使用前</div>
+                <div class="folder-tree">
+                    <div><span class="folder-icon">📁</span> attachments</div>
+                    <div class="subfolder">
+                        <div class="file">├── Pasted 001.png</div>
+                        <div class="file">├── Pasted 002.png</div>
+                        <div class="file">├── ...</div>
+                        <div class="file">└── Pasted 500.png</div>
+                    </div>
+                </div>
+            </div>
+            <div class="side">
+                <div class="side-title good">✅ 使用后</div>
+                <div class="folder-tree">
+                    <div><span class="folder-icon">📁</span> assets</div>
+                    <div class="subfolder">
+                        <div><span class="folder-icon">📁</span> 笔记A</div>
+                        <div class="subfolder">
+                            <div class="file">├── 图片1.png</div>
+                            <div class="file">└── 图片2.png</div>
+                        </div>
+                        <div><span class="folder-icon">📁</span> 笔记B</div>
+                        <div class="subfolder">
+                            <div class="file">└── 图片3.png</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="highlight">支持 {filename} {date} 等变量自定义路径</div>
+    </div>
+</body>
+</html>
