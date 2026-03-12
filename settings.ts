@@ -35,8 +35,6 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Image Markdown Paste 设置' });
-
 		// 图片保存路径设置
 		new Setting(containerEl)
 			.setName('图片保存路径')
@@ -94,7 +92,10 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 				}));
 
 		// 添加变量说明
-		containerEl.createEl('h3', { text: '可用变量' });
+		new Setting(containerEl)
+			.setName('可用变量')
+			.setHeading();
+
 		const varList = containerEl.createEl('ul');
 		const variables = [
 			{ name: '{filename}', desc: '当前文档的文件名（不含扩展名）' },
@@ -119,10 +120,10 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 		const frag = document.createDocumentFragment();
 		frag.appendText('设置粘贴图片的保存路径，支持使用变量。例如：');
 		frag.appendChild(document.createElement('br'));
-		const code = frag.createEl('code', { text: 'attachments/{filename}' });
-		code.style.backgroundColor = 'var(--background-modifier-hover)';
-		code.style.padding = '2px 4px';
-		code.style.borderRadius = '4px';
+		const code = frag.createEl('code', { 
+			text: 'attachments/{filename}',
+			cls: 'image-markdown-paste-code'
+		});
 		frag.appendText(' 会将图片保存到与文档同名的子文件夹中');
 		return frag;
 	}

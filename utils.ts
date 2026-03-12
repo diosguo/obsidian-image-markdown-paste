@@ -204,7 +204,7 @@ export function decodeUrlPath(path: string): string {
 	return path.split('/').map(segment => {
 		try {
 			return decodeURIComponent(segment);
-		} catch (e) {
+		} catch {
 			// 解码失败返回原字符串
 			return segment;
 		}

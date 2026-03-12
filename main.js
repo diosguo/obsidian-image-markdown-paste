@@ -46,7 +46,6 @@ var ImageMarkdownPasteSettingTab = class extends import_obsidian.PluginSettingTa
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Image Markdown Paste \u8BBE\u7F6E" });
     new import_obsidian.Setting(containerEl).setName("\u56FE\u7247\u4FDD\u5B58\u8DEF\u5F84").setDesc(this.createPathDescription()).addText((text) => text.setPlaceholder("attachments/{filename}").setValue(this.plugin.settings.imageSavePath).onChange(async (value) => {
       this.plugin.settings.imageSavePath = value || DEFAULT_SETTINGS.imageSavePath;
       await this.plugin.saveSettings();
@@ -67,7 +66,7 @@ var ImageMarkdownPasteSettingTab = class extends import_obsidian.PluginSettingTa
       this.plugin.settings.enableMoveSync = value;
       await this.plugin.saveSettings();
     }));
-    containerEl.createEl("h3", { text: "\u53EF\u7528\u53D8\u91CF" });
+    new import_obsidian.Setting(containerEl).setName("\u53EF\u7528\u53D8\u91CF").setHeading();
     const varList = containerEl.createEl("ul");
     const variables = [
       { name: "{filename}", desc: "\u5F53\u524D\u6587\u6863\u7684\u6587\u4EF6\u540D\uFF08\u4E0D\u542B\u6269\u5C55\u540D\uFF09" },
@@ -91,10 +90,10 @@ var ImageMarkdownPasteSettingTab = class extends import_obsidian.PluginSettingTa
     const frag = document.createDocumentFragment();
     frag.appendText("\u8BBE\u7F6E\u7C98\u8D34\u56FE\u7247\u7684\u4FDD\u5B58\u8DEF\u5F84\uFF0C\u652F\u6301\u4F7F\u7528\u53D8\u91CF\u3002\u4F8B\u5982\uFF1A");
     frag.appendChild(document.createElement("br"));
-    const code = frag.createEl("code", { text: "attachments/{filename}" });
-    code.style.backgroundColor = "var(--background-modifier-hover)";
-    code.style.padding = "2px 4px";
-    code.style.borderRadius = "4px";
+    const code = frag.createEl("code", {
+      text: "attachments/{filename}",
+      cls: "image-markdown-paste-code"
+    });
     frag.appendText(" \u4F1A\u5C06\u56FE\u7247\u4FDD\u5B58\u5230\u4E0E\u6587\u6863\u540C\u540D\u7684\u5B50\u6587\u4EF6\u5939\u4E2D");
     return frag;
   }
@@ -203,10 +202,10 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
         this.organizeImagesInCurrentFile(view);
       }
     });
-    console.log("Image Markdown Paste plugin loaded");
+    console.debug("Image Markdown Paste plugin loaded");
   }
   onunload() {
-    console.log("Image Markdown Paste plugin unloaded");
+    console.debug("Image Markdown Paste plugin unloaded");
   }
   async loadSettings() {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
@@ -372,7 +371,7 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
         const oldRelativePath = getRelativePath(file.path, oldImagePath);
         newContent = this.updateAllImageRefs(newContent, oldRelativePath, newRelativePath, altText);
         hasChanges = true;
-        console.log(`\u56FE\u7247\u5DF2\u91CD\u547D\u540D: ${oldImagePath} -> ${newImagePath}`);
+        console.debug(`\u56FE\u7247\u5DF2\u91CD\u547D\u540D: ${oldImagePath} -> ${newImagePath}`);
       } catch (error) {
         console.error(`\u91CD\u547D\u540D\u56FE\u7247\u5931\u8D25: ${oldImagePath}`, error);
       }
@@ -546,7 +545,7 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
   /**
    * 转换当前文件中的所有图片引用为标准 Markdown
    */
-  async convertImageReferencesInCurrentFile(editor, view) {
+  convertImageReferencesInCurrentFile(editor, view) {
     var _a;
     const file = view.file;
     if (!file)

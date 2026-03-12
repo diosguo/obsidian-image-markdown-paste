@@ -1,12 +1,10 @@
 import {
 	Plugin,
 	TFile,
-	TFolder,
 	TAbstractFile,
 	Editor,
 	MarkdownView,
 	Notice,
-	Platform,
 } from 'obsidian';
 import { ImageMarkdownPasteSettings, DEFAULT_SETTINGS, ImageMarkdownPasteSettingTab } from './settings';
 import {
@@ -14,10 +12,7 @@ import {
 	generateImageFileName,
 	getRelativePath,
 	isImagePath,
-	parseWikiLink,
-	parseMarkdownLink,
 	createMarkdownLink,
-	normalizePath,
 	encodeUrlPath,
 } from './utils';
 
@@ -67,11 +62,11 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 			}
 		});
 
-		console.log('Image Markdown Paste plugin loaded');
+		console.debug('Image Markdown Paste plugin loaded');
 	}
 
 	onunload() {
-		console.log('Image Markdown Paste plugin unloaded');
+		console.debug('Image Markdown Paste plugin unloaded');
 	}
 
 	async loadSettings() {
@@ -309,7 +304,7 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 				newContent = this.updateAllImageRefs(newContent, oldRelativePath, newRelativePath, altText);
 				hasChanges = true;
 				
-				console.log(`图片已重命名: ${oldImagePath} -> ${newImagePath}`);
+				console.debug(`图片已重命名: ${oldImagePath} -> ${newImagePath}`);
 			} catch (error) {
 				console.error(`重命名图片失败: ${oldImagePath}`, error);
 			}
@@ -496,7 +491,7 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 		let decodedPath: string;
 		try {
 			decodedPath = decodeURIComponent(imagePath);
-		} catch (e) {
+		} catch {
 			// 解码失败使用原路径
 			decodedPath = imagePath;
 		}
@@ -563,7 +558,7 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 	/**
 	 * 转换当前文件中的所有图片引用为标准 Markdown
 	 */
-	private async convertImageReferencesInCurrentFile(editor: Editor, view: MarkdownView) {
+	private convertImageReferencesInCurrentFile(editor: Editor, view: MarkdownView) {
 		const file = view.file;
 		if (!file) return;
 
