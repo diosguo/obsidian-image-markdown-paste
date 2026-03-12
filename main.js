@@ -499,19 +499,25 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
    * 解析图片路径为绝对路径
    */
   resolveImagePath(imagePath, sourceFilePath) {
-    if (imagePath.startsWith("/")) {
-      return imagePath.slice(1);
+    let decodedPath;
+    try {
+      decodedPath = decodeURIComponent(imagePath);
+    } catch (e) {
+      decodedPath = imagePath;
     }
-    const abstractFile = this.app.vault.getAbstractFileByPath(imagePath);
+    if (decodedPath.startsWith("/")) {
+      return decodedPath.slice(1);
+    }
+    const abstractFile = this.app.vault.getAbstractFileByPath(decodedPath);
     if (abstractFile) {
-      return imagePath;
+      return decodedPath;
     }
     const sourceDir = sourceFilePath.split("/").slice(0, -1).join("/");
-    if (imagePath.startsWith("./")) {
-      return sourceDir ? `${sourceDir}/${imagePath.slice(2)}` : imagePath.slice(2);
+    if (decodedPath.startsWith("./")) {
+      return sourceDir ? `${sourceDir}/${decodedPath.slice(2)}` : decodedPath.slice(2);
     }
-    if (imagePath.startsWith("../")) {
-      const parts = imagePath.split("/");
+    if (decodedPath.startsWith("../")) {
+      const parts = decodedPath.split("/");
       let dirParts = sourceDir ? sourceDir.split("/") : [];
       for (const part of parts) {
         if (part === "..") {
@@ -522,7 +528,7 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
       }
       return dirParts.join("/");
     }
-    return sourceDir ? `${sourceDir}/${imagePath}` : imagePath;
+    return sourceDir ? `${sourceDir}/${decodedPath}` : decodedPath;
   }
   /**
    * 替换图片引用

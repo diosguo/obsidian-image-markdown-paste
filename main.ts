@@ -492,26 +492,35 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 	 * 解析图片路径为绝对路径
 	 */
 	private resolveImagePath(imagePath: string, sourceFilePath: string): string | null {
+		// 解码 URL 编码的路径（处理 %20 等特殊字符）
+		let decodedPath: string;
+		try {
+			decodedPath = decodeURIComponent(imagePath);
+		} catch (e) {
+			// 解码失败使用原路径
+			decodedPath = imagePath;
+		}
+
 		// 如果已经是绝对路径
-		if (imagePath.startsWith('/')) {
-			return imagePath.slice(1);
+		if (decodedPath.startsWith('/')) {
+			return decodedPath.slice(1);
 		}
 
 		// 如果是以 vault 根目录开头的路径
-		const abstractFile = this.app.vault.getAbstractFileByPath(imagePath);
+		const abstractFile = this.app.vault.getAbstractFileByPath(decodedPath);
 		if (abstractFile) {
-			return imagePath;
+			return decodedPath;
 		}
 
 		// 相对路径，需要计算
 		const sourceDir = sourceFilePath.split('/').slice(0, -1).join('/');
 		
-		if (imagePath.startsWith('./')) {
-			return sourceDir ? `${sourceDir}/${imagePath.slice(2)}` : imagePath.slice(2);
+		if (decodedPath.startsWith('./')) {
+			return sourceDir ? `${sourceDir}/${decodedPath.slice(2)}` : decodedPath.slice(2);
 		}
 
-		if (imagePath.startsWith('../')) {
-			const parts = imagePath.split('/');
+		if (decodedPath.startsWith('../')) {
+			const parts = decodedPath.split('/');
 			let dirParts = sourceDir ? sourceDir.split('/') : [];
 			
 			for (const part of parts) {
@@ -526,7 +535,7 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 		}
 
 		// 假设是相对当前目录的路径
-		return sourceDir ? `${sourceDir}/${imagePath}` : imagePath;
+		return sourceDir ? `${sourceDir}/${decodedPath}` : decodedPath;
 	}
 
 	/**
