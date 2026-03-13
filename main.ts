@@ -49,7 +49,7 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 			id: 'convert-image-references',
 			name: '转换图片引用为标准 Markdown',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				this.convertImageReferencesInCurrentFile(editor, view);
+				void this.convertImageReferencesInCurrentFile(editor, view);
 			}
 		});
 
@@ -58,7 +58,7 @@ export default class ImageMarkdownPastePlugin extends Plugin {
 			id: 'organize-images',
 			name: '整理当前文档的图片到配置路径',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				this.organizeImagesInCurrentFile(view);
+				void this.organizeImagesInCurrentFile(view);
 			}
 		});
 

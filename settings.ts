@@ -42,9 +42,9 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 			.addText(text => text
 				.setPlaceholder('attachments/{filename}')
 				.setValue(this.plugin.settings.imageSavePath)
-				.onChange(async (value) => {
+				.onChange((value) => {
 					this.plugin.settings.imageSavePath = value || DEFAULT_SETTINGS.imageSavePath;
-					await this.plugin.saveSettings();
+					void this.plugin.saveSettings();
 				}));
 
 		// 使用标准 Markdown 格式
@@ -53,9 +53,9 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 			.setDesc('启用后，图片引用将使用标准的 Markdown 格式 ![alt](path)，而不是 WikiLink 格式 [[path]]')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.useStandardMarkdown)
-				.onChange(async (value) => {
+				.onChange((value) => {
 					this.plugin.settings.useStandardMarkdown = value;
-					await this.plugin.saveSettings();
+					void this.plugin.saveSettings();
 				}));
 
 		// 自动重命名冲突文件
@@ -64,9 +64,9 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 			.setDesc('当目标位置已存在同名文件时，自动添加序号重命名')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.autoRenameOnConflict)
-				.onChange(async (value) => {
+				.onChange((value) => {
 					this.plugin.settings.autoRenameOnConflict = value;
-					await this.plugin.saveSettings();
+					void this.plugin.saveSettings();
 				}));
 
 		// 文件重命名同步
@@ -75,9 +75,9 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 			.setDesc('当文档重命名时，自动同步重命名文档中引用的图片（仅当路径包含 {filename} 变量时）')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.enableRenameSync)
-				.onChange(async (value) => {
+				.onChange((value) => {
 					this.plugin.settings.enableRenameSync = value;
-					await this.plugin.saveSettings();
+					void this.plugin.saveSettings();
 				}));
 
 		// 文件移动同步
@@ -86,9 +86,9 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 			.setDesc('当文档移动到其他位置时，自动将相关图片移动到更新后的位置')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.enableMoveSync)
-				.onChange(async (value) => {
+				.onChange((value) => {
 					this.plugin.settings.enableMoveSync = value;
-					await this.plugin.saveSettings();
+					void this.plugin.saveSettings();
 				}));
 
 		// 添加变量说明
@@ -120,7 +120,7 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 		const frag = document.createDocumentFragment();
 		frag.appendText('设置粘贴图片的保存路径，支持使用变量。例如：');
 		frag.appendChild(document.createElement('br'));
-		const code = frag.createEl('code', { 
+		frag.createEl('code', { 
 			text: 'attachments/{filename}',
 			cls: 'image-markdown-paste-code'
 		});

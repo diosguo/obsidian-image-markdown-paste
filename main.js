@@ -46,25 +46,25 @@ var ImageMarkdownPasteSettingTab = class extends import_obsidian.PluginSettingTa
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    new import_obsidian.Setting(containerEl).setName("\u56FE\u7247\u4FDD\u5B58\u8DEF\u5F84").setDesc(this.createPathDescription()).addText((text) => text.setPlaceholder("attachments/{filename}").setValue(this.plugin.settings.imageSavePath).onChange(async (value) => {
+    new import_obsidian.Setting(containerEl).setName("\u56FE\u7247\u4FDD\u5B58\u8DEF\u5F84").setDesc(this.createPathDescription()).addText((text) => text.setPlaceholder("attachments/{filename}").setValue(this.plugin.settings.imageSavePath).onChange((value) => {
       this.plugin.settings.imageSavePath = value || DEFAULT_SETTINGS.imageSavePath;
-      await this.plugin.saveSettings();
+      void this.plugin.saveSettings();
     }));
-    new import_obsidian.Setting(containerEl).setName("\u4F7F\u7528\u6807\u51C6 Markdown \u683C\u5F0F").setDesc("\u542F\u7528\u540E\uFF0C\u56FE\u7247\u5F15\u7528\u5C06\u4F7F\u7528\u6807\u51C6\u7684 Markdown \u683C\u5F0F ![alt](path)\uFF0C\u800C\u4E0D\u662F WikiLink \u683C\u5F0F [[path]]").addToggle((toggle) => toggle.setValue(this.plugin.settings.useStandardMarkdown).onChange(async (value) => {
+    new import_obsidian.Setting(containerEl).setName("\u4F7F\u7528\u6807\u51C6 Markdown \u683C\u5F0F").setDesc("\u542F\u7528\u540E\uFF0C\u56FE\u7247\u5F15\u7528\u5C06\u4F7F\u7528\u6807\u51C6\u7684 Markdown \u683C\u5F0F ![alt](path)\uFF0C\u800C\u4E0D\u662F WikiLink \u683C\u5F0F [[path]]").addToggle((toggle) => toggle.setValue(this.plugin.settings.useStandardMarkdown).onChange((value) => {
       this.plugin.settings.useStandardMarkdown = value;
-      await this.plugin.saveSettings();
+      void this.plugin.saveSettings();
     }));
-    new import_obsidian.Setting(containerEl).setName("\u6587\u4EF6\u540D\u51B2\u7A81\u65F6\u81EA\u52A8\u91CD\u547D\u540D").setDesc("\u5F53\u76EE\u6807\u4F4D\u7F6E\u5DF2\u5B58\u5728\u540C\u540D\u6587\u4EF6\u65F6\uFF0C\u81EA\u52A8\u6DFB\u52A0\u5E8F\u53F7\u91CD\u547D\u540D").addToggle((toggle) => toggle.setValue(this.plugin.settings.autoRenameOnConflict).onChange(async (value) => {
+    new import_obsidian.Setting(containerEl).setName("\u6587\u4EF6\u540D\u51B2\u7A81\u65F6\u81EA\u52A8\u91CD\u547D\u540D").setDesc("\u5F53\u76EE\u6807\u4F4D\u7F6E\u5DF2\u5B58\u5728\u540C\u540D\u6587\u4EF6\u65F6\uFF0C\u81EA\u52A8\u6DFB\u52A0\u5E8F\u53F7\u91CD\u547D\u540D").addToggle((toggle) => toggle.setValue(this.plugin.settings.autoRenameOnConflict).onChange((value) => {
       this.plugin.settings.autoRenameOnConflict = value;
-      await this.plugin.saveSettings();
+      void this.plugin.saveSettings();
     }));
-    new import_obsidian.Setting(containerEl).setName("\u542F\u7528\u91CD\u547D\u540D\u540C\u6B65").setDesc("\u5F53\u6587\u6863\u91CD\u547D\u540D\u65F6\uFF0C\u81EA\u52A8\u540C\u6B65\u91CD\u547D\u540D\u6587\u6863\u4E2D\u5F15\u7528\u7684\u56FE\u7247\uFF08\u4EC5\u5F53\u8DEF\u5F84\u5305\u542B {filename} \u53D8\u91CF\u65F6\uFF09").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableRenameSync).onChange(async (value) => {
+    new import_obsidian.Setting(containerEl).setName("\u542F\u7528\u91CD\u547D\u540D\u540C\u6B65").setDesc("\u5F53\u6587\u6863\u91CD\u547D\u540D\u65F6\uFF0C\u81EA\u52A8\u540C\u6B65\u91CD\u547D\u540D\u6587\u6863\u4E2D\u5F15\u7528\u7684\u56FE\u7247\uFF08\u4EC5\u5F53\u8DEF\u5F84\u5305\u542B {filename} \u53D8\u91CF\u65F6\uFF09").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableRenameSync).onChange((value) => {
       this.plugin.settings.enableRenameSync = value;
-      await this.plugin.saveSettings();
+      void this.plugin.saveSettings();
     }));
-    new import_obsidian.Setting(containerEl).setName("\u542F\u7528\u79FB\u52A8\u540C\u6B65").setDesc("\u5F53\u6587\u6863\u79FB\u52A8\u5230\u5176\u4ED6\u4F4D\u7F6E\u65F6\uFF0C\u81EA\u52A8\u5C06\u76F8\u5173\u56FE\u7247\u79FB\u52A8\u5230\u66F4\u65B0\u540E\u7684\u4F4D\u7F6E").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableMoveSync).onChange(async (value) => {
+    new import_obsidian.Setting(containerEl).setName("\u542F\u7528\u79FB\u52A8\u540C\u6B65").setDesc("\u5F53\u6587\u6863\u79FB\u52A8\u5230\u5176\u4ED6\u4F4D\u7F6E\u65F6\uFF0C\u81EA\u52A8\u5C06\u76F8\u5173\u56FE\u7247\u79FB\u52A8\u5230\u66F4\u65B0\u540E\u7684\u4F4D\u7F6E").addToggle((toggle) => toggle.setValue(this.plugin.settings.enableMoveSync).onChange((value) => {
       this.plugin.settings.enableMoveSync = value;
-      await this.plugin.saveSettings();
+      void this.plugin.saveSettings();
     }));
     new import_obsidian.Setting(containerEl).setName("\u53EF\u7528\u53D8\u91CF").setHeading();
     const varList = containerEl.createEl("ul");
@@ -90,7 +90,7 @@ var ImageMarkdownPasteSettingTab = class extends import_obsidian.PluginSettingTa
     const frag = document.createDocumentFragment();
     frag.appendText("\u8BBE\u7F6E\u7C98\u8D34\u56FE\u7247\u7684\u4FDD\u5B58\u8DEF\u5F84\uFF0C\u652F\u6301\u4F7F\u7528\u53D8\u91CF\u3002\u4F8B\u5982\uFF1A");
     frag.appendChild(document.createElement("br"));
-    const code = frag.createEl("code", {
+    frag.createEl("code", {
       text: "attachments/{filename}",
       cls: "image-markdown-paste-code"
     });
@@ -192,14 +192,14 @@ var ImageMarkdownPastePlugin = class extends import_obsidian3.Plugin {
       id: "convert-image-references",
       name: "\u8F6C\u6362\u56FE\u7247\u5F15\u7528\u4E3A\u6807\u51C6 Markdown",
       editorCallback: (editor, view) => {
-        this.convertImageReferencesInCurrentFile(editor, view);
+        void this.convertImageReferencesInCurrentFile(editor, view);
       }
     });
     this.addCommand({
       id: "organize-images",
       name: "\u6574\u7406\u5F53\u524D\u6587\u6863\u7684\u56FE\u7247\u5230\u914D\u7F6E\u8DEF\u5F84",
       editorCallback: (editor, view) => {
-        this.organizeImagesInCurrentFile(view);
+        void this.organizeImagesInCurrentFile(view);
       }
     });
     console.debug("Image Markdown Paste plugin loaded");
