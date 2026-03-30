@@ -35,9 +35,9 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		// 图片保存路径设置
+		// Image save path setting
 		new Setting(containerEl)
-			.setName('图片保存路径')
+			.setName('Image save path')
 			.setDesc(this.createPathDescription())
 			.addText(text => text
 				.setPlaceholder('attachments/{filename}')
@@ -47,10 +47,10 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 					void this.plugin.saveSettings();
 				}));
 
-		// 使用标准 Markdown 格式
+		// Use standard Markdown format
 		new Setting(containerEl)
-			.setName('使用标准 Markdown 格式')
-			.setDesc('启用后，图片引用将使用标准的 Markdown 格式 ![alt](path)，而不是 WikiLink 格式 [[path]]')
+			.setName('Use standard Markdown format')
+			.setDesc('When enabled, image references will use standard Markdown format ![alt](path) instead of WikiLink format [[path]]')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.useStandardMarkdown)
 				.onChange((value) => {
@@ -58,10 +58,10 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 					void this.plugin.saveSettings();
 				}));
 
-		// 自动重命名冲突文件
+		// Auto rename on conflict
 		new Setting(containerEl)
-			.setName('文件名冲突时自动重命名')
-			.setDesc('当目标位置已存在同名文件时，自动添加序号重命名')
+			.setName('Auto rename on conflict')
+			.setDesc('Automatically add sequence numbers when a file with the same name exists in the target location')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.autoRenameOnConflict)
 				.onChange((value) => {
@@ -69,10 +69,10 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 					void this.plugin.saveSettings();
 				}));
 
-		// 文件重命名同步
+		// Enable rename sync
 		new Setting(containerEl)
-			.setName('启用重命名同步')
-			.setDesc('当文档重命名时，自动同步重命名文档中引用的图片（仅当路径包含 {filename} 变量时）')
+			.setName('Enable rename sync')
+			.setDesc('Automatically rename referenced images when document is renamed (only when path contains {filename} variable)')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.enableRenameSync)
 				.onChange((value) => {
@@ -80,10 +80,10 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 					void this.plugin.saveSettings();
 				}));
 
-		// 文件移动同步
+		// Enable move sync
 		new Setting(containerEl)
-			.setName('启用移动同步')
-			.setDesc('当文档移动到其他位置时，自动将相关图片移动到更新后的位置')
+			.setName('Enable move sync')
+			.setDesc('Automatically move related images to the updated location when document is moved')
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.enableMoveSync)
 				.onChange((value) => {
@@ -91,23 +91,23 @@ export class ImageMarkdownPasteSettingTab extends PluginSettingTab {
 					void this.plugin.saveSettings();
 				}));
 
-		// 添加变量说明
+		// Add variable description
 		new Setting(containerEl)
-			.setName('可用变量')
+			.setName('Available variables')
 			.setHeading();
 
 		const varList = containerEl.createEl('ul');
 		const variables = [
-			{ name: '{filename}', desc: '当前文档的文件名（不含扩展名）' },
-			{ name: '{filepath}', desc: '当前文档的完整路径（不含扩展名）' },
-			{ name: '{folder}', desc: '当前文档所在文件夹名称' },
-			{ name: '{folderpath}', desc: '当前文档所在文件夹的完整路径' },
-			{ name: '{date}', desc: '当前日期（YYYYMMDD）' },
-			{ name: '{time}', desc: '当前时间（HHmmss）' },
-			{ name: '{datetime}', desc: '当前日期时间（YYYYMMDD-HHmmss）' },
-			{ name: '{year}', desc: '当前年份' },
-			{ name: '{month}', desc: '当前月份' },
-			{ name: '{day}', desc: '当前日期' },
+			{ name: '{filename}', desc: 'Current document filename (without extension)' },
+			{ name: '{filepath}', desc: 'Full path of current document (without extension)' },
+			{ name: '{folder}', desc: 'Name of the folder containing the document' },
+			{ name: '{folderpath}', desc: 'Full path of the folder containing the document' },
+			{ name: '{date}', desc: 'Current date (YYYYMMDD)' },
+			{ name: '{time}', desc: 'Current time (HHmmss)' },
+			{ name: '{datetime}', desc: 'Current date and time (YYYYMMDD-HHmmss)' },
+			{ name: '{year}', desc: 'Current year' },
+			{ name: '{month}', desc: 'Current month' },
+			{ name: '{day}', desc: 'Current day' },
 		];
 		variables.forEach(v => {
 			const li = varList.createEl('li');
